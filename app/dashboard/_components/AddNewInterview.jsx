@@ -55,20 +55,32 @@ function AddNewInterview() {
     e.preventDefault();
     setLoading(true);
 
-    const InputPrompt = `
-      Generate ONLY ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions.
-      Role: ${jobPosition}
-      Description: ${jobDesc}
-      Experience: ${jobExperience} years
+const InputPrompt = `
+You are a professional technical interviewer.
 
-      Return STRICT JSON:
-      [
-        {"question": "...", "answer": "..."},
-        ...
-      ]
+Generate exactly ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions
+and provide a meaningful, non-empty answer for EACH question.
 
-      No text. No explanation. Only JSON.
-    `;
+Job Role: ${jobPosition}
+Job Description: ${jobDesc}
+Experience Required: ${jobExperience} years
+
+STRICT RULES:
+- Each question MUST have an answer
+- Answers must be maximum 1–3 sentences
+- DO NOT leave answers empty
+- DO NOT use placeholders like "..."
+- DO NOT add any explanation or extra text
+- ONLY return valid JSON
+
+FORMAT (follow exactly):
+[
+  {
+    "question": "Question here",
+    "answer": "Detailed answer here"
+  }
+]
+`;
 
     try {
       // ⭐ CALL GROQ AI
@@ -117,65 +129,74 @@ function AddNewInterview() {
       </div>
 
       <Dialog open={openDailog} onOpenChange={setOpenDailog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">Describe Your Interview</DialogTitle>
-            <DialogDescription>
-              Add job role, description, and experience.
-            </DialogDescription>
-          </DialogHeader>
+  {/* Added backdrop-blur-md to the overlay for that frosted look on the background */}
+  <DialogContent className="max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl p-8">
+    
+    <DialogHeader>
+      <DialogTitle className="text-3xl font-bold text-white tracking-tight">
+        Describe Your Interview
+      </DialogTitle>
+      <DialogDescription className="text-gray-300/80 text-base mt-2">
+        Add job role, description, and experience to get started.
+      </DialogDescription>
+    </DialogHeader>
 
-          <form onSubmit={onSubmit} className="mt-4">
-            <div className="text-xs">
-              <div className="mt-7 my-3">
-                <label>Job Role / Position</label>
-                <input
-                  placeholder="Fullstack Developer"
-                  required
-                  onChange={(e) => setjobPosition(e.target.value)}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
+    <form onSubmit={onSubmit} className="mt-8 space-y-6">
+      <div className="space-y-5">
+        
+        {/* Job Role */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-blue-200/70 ml-1 uppercase tracking-wider">Job Role / Position</label>
+          <input
+            placeholder="Fullstack Developer"
+            required
+            onChange={(e) => setjobPosition(e.target.value)}
+            className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+          />
+        </div>
 
-              <div className="my-2">
-                <label>Job Description</label>
-                <textarea
-                  placeholder="React, NodeJS, MongoDB etc."
-                  required
-                  onChange={(e) => setjobDeDesc(e.target.value)}
-                  className="w-full h-24 p-2 border rounded-md resize-none"
-                />
-              </div>
+        {/* Job Description */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-blue-200/70 ml-1 uppercase tracking-wider">Job Description</label>
+          <textarea
+            placeholder="React, NodeJS, MongoDB etc."
+            required
+            onChange={(e) => setjobDeDesc(e.target.value)}
+            className="w-full h-32 px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
+          />
+        </div>
 
-              <div className="my-1">
-                <label>Years of Experience</label>
-                <input
-                  type="number"
-                  placeholder="2"
-                  required
-                  onChange={(e) => setjobExperience(e.target.value)}
-                  className="w-full p-2 border rounded-md"
-                />
-              </div>
-            </div>
+        {/* Experience */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-blue-200/70 ml-1 uppercase tracking-wider">Years of Experience</label>
+          <input
+            type="number"
+            placeholder="2"
+            required
+            onChange={(e) => setjobExperience(e.target.value)}
+            className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+          />
+        </div>
+      </div>
 
-            <div className="flex gap-5 justify-end mt-4">
-              <Button variant="ghost" type="button" onClick={() => setOpenDailog(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? (
-                  <>
-                    <LoaderCircle className="animate-spin mr-2" /> Loading
-                  </>
-                ) : (
-                  "Start Interview"
-                )}
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <div className="flex justify-end items-center gap-6 mt-10">
+        <button 
+          type="button" 
+          onClick={() => setOpenDailog(false)}
+          className="text-gray-400 hover:text-white transition-colors font-medium"
+        >
+          Cancel
+        </button>
+        <button 
+          type="submit" 
+          className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all cursor-pointer active:scale-95"
+        >
+          Generate Questions
+        </button>
+      </div>
+    </form>
+  </DialogContent>
+</Dialog>
     </div>
   );
 }

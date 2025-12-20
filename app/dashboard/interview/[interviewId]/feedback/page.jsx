@@ -35,7 +35,7 @@ function Feedback({ params }) {
   };
 
   return (
-    <div className="relative min-h-screen px-6 py-10">
+    <div className="relative min-h-screen px-6 py-10 cursor-pointer">
 
       {/* 🔥 Background Blobs (Purple × Blue premium style) */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -46,7 +46,7 @@ function Feedback({ params }) {
           }}
         />
         <div
-          className="absolute w-[60vw] h-[60vw] bottom-[-20%] right-[-20%] rounded-full opacity-30 blur-[100px]"
+          className="cursor-pointer absolute w-[60vw] h-[60vw] bottom-[-20%] right-[-20%] rounded-full opacity-30 blur-[100px]"
           style={{
             background: "radial-gradient(circle at center, #3b82f6, transparent 70%)",
           }}
@@ -107,7 +107,7 @@ function Feedback({ params }) {
                     <strong>Correct Answer: </strong> {item.correctAns}
                   </p>
 
-                  <p className="p-3 rounded-lg bg-blue-700/20 border border-blue-500/30 text-blue-200 text-sm">
+                  <p className="p-3 rounded-lg bg-blue-700/20 border border-blue-500/30 text-blue-200 text-sm ">
                     <strong>Feedback: </strong> {item.feedback}
                   </p>
                 </CollapsibleContent>
@@ -123,7 +123,7 @@ function Feedback({ params }) {
           onClick={() => router.replace("/dashboard")}
           className="
             bg-gradient-to-r from-blue-600 to-purple-700
-            hover:opacity-90 transition-all rounded-xl px-6 text-white shadow-xl
+            hover:opacity-90 transition-all rounded-xl px-6 text-white shadow-xl cursor-pointer
           "
         >
           Go Home

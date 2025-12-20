@@ -18,7 +18,7 @@ export default function InterviewItemCard({ interview }) {
       </p>
 
       <div className="flex gap-2 mt-4">
-        <Button className="glass-btn w-full" onClick={() =>
+        <Button className="cursor-pointer glass-btn w-full" onClick={() =>
           router.push(`/dashboard/interview/${interview.mockId}/feedback`)
         }>
           Feedback
